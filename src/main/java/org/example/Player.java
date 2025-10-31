@@ -27,12 +27,12 @@ public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject 
 
     @Override
     public Movable move(V2 dir) {
-        return mgo.move(dir);
+        return new Player(mgo().move(dir));
     }
 
     public MovableGameObject shoot() {
-        return new MovableGameObject(hitBox().pos().plus(new V2(0,1)), List.of("|", "ˇ"));
-        ;
+        return new MovableGameObject(hitBox().pos().plus(new V2(0,-2)), List.of("|", "^"));
+
     }
 }
 

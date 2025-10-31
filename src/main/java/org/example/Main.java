@@ -9,13 +9,17 @@ import static java.lang.IO.println;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() throws IOException, InterruptedException {
-    println(Alien.createAliens());
+   // println(Alien.createAliens());
 
-    var tui = new TUI(40,27);
-    var model = new Model();
+    var tui = new TUI(100,60);
+    var model = new Model(100, 60);
     while (true){
-    println(model.getUIState());
-    tui.print(model.getUIState());
-    model.update(' ');
+        println(model.gameObjects());
+       //println(model.getUIState());
+        tui.print(model.getUIState());
+        var input = tui.getPressedKey();
+        model.update(input);
+
+
     }
 }}
