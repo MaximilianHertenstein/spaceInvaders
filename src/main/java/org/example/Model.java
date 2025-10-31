@@ -34,6 +34,8 @@ public class Model {
         this.playerBullet = null;
         this.alienBullets = List.of();
         this.blocks = List.of();
+        this.aliensDirection = new V2(1,0);
+        this.lives = 3;
     }
 
 
@@ -46,36 +48,44 @@ public class Model {
         return acc;
     }
 
-    public <T extends Movable> List<T> move(List<T> mgos, V2 dir) {
-        var res = new ArrayList<T>();
-        for (var mgo : mgos){
-            res.add((T) mgo.move(dir));
-        }
-        return res;
-    }
+
 
 
     public void move(char dir){
-        playerBullet = playerBullet.move(new V2(0,-1));
-        alienBullets = move(alienBullets, new V2(0,1));
-        aliens = move(aliens, aliensDirection);
-        player = (Player) player.move(Utils.charToV2(dir));
+        if (playerBullet != null){
+            playerBullet = playerBullet.move(new V2(0,-1));
+        }
+        alienBullets = Utils.move(alienBullets, new V2(0,1));
+        aliens = Utils.move(aliens, aliensDirection);
+        //player = (Player) player.move(Utils.charToV2(dir));
     }
 
     public List<StringWithLocation>  getUIState(){
         return Utils.getStringsWithLocation(gameObjects());
     }
-
-    public  <T extends  IBasicGameObject>  List<T>  removeDeadObjects( List<T> objectsToFilter ){
-
-
-        var x =  Utils.removeDeadObjects(width,height,  blocks, gameObjects());
-        return (List<T>) x;
-    }
+//
+//    public <T extends IBasicGameObject> List<T> removeDeadObjects(List<T> objectsToFilter ){
+//
+//
+//         List<T> x = Utils.removeDeadObjects(width,height, blocks, gameObjects());
+//        return (List<T>) x;
+//    }
 
 
     public void removeDeadObjects(){
         blocks = Utils.removeDeadObjects(width,height,  blocks, gameObjects());
+        aliens = Utils.removeDeadObjects(width,height,  aliens, gameObjects());
+        alienBullets = Utils.removeDeadObjects(width,height,  alienBullets, gameObjects());
+        if (playerBullet!= null &&  !playerBullet.isAlive(gameObjects(),width,height)){
+            playerBullet = null;
+        }
+    }
+
+
+    void update(char dir){
+        removeDeadObjects();
+        move(dir);
+        aliensDirection = Utils.computeNextAlienDirection(aliens, width, aliensDirection);
     }
 
 

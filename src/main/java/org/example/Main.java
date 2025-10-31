@@ -13,6 +13,9 @@ public class Main {
 
     var tui = new TUI(40,27);
     var model = new Model();
+    while (true){
     println(model.getUIState());
     tui.print(model.getUIState());
+    model.update(' ');
+    }
 }}

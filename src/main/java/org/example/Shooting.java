@@ -1,5 +1,5 @@
 package org.example;
 
-public interface Shooting {
-    MovableGameObject shoot();
-}
+//public interface Shooting {
+//    MovableGameObject shoot();
+//}

@@ -3,7 +3,7 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Alien(MovableGameObject mgo, int score, int id) implements Movable,IBasicGameObject,Shooting {
+public record Alien(MovableGameObject mgo, int score, int id) implements Movable,IBasicGameObject {
 
 
     Alien(V2 pos, List<String> displayStrings, int  score, int id){
@@ -33,7 +33,6 @@ public record Alien(MovableGameObject mgo, int score, int id) implements Movable
 
 
 
-    @Override
     public MovableGameObject shoot() {
         return new MovableGameObject(hitBox().pos().plus(new V2(0,1)), List.of("|", "ˇ"));
     }

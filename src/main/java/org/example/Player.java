@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.List;
 
-public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject,Shooting {
+public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject {
 
     Player(V2 pos){
         this(new MovableGameObject(pos, List.of("_/MM\\_", "qWAAWp")));
@@ -30,9 +30,9 @@ public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject,
         return mgo.move(dir);
     }
 
-    @Override
     public MovableGameObject shoot() {
-        return null;
+        return new MovableGameObject(hitBox().pos().plus(new V2(0,1)), List.of("|", "ˇ"));
+        ;
     }
 }
 
