@@ -11,7 +11,8 @@ public class Main {
     static void main() throws IOException, InterruptedException {
     println(Alien.createAliens());
 
-    var tui = new TUI(40,40);
+    var tui = new TUI(40,27);
     var model = new Model();
+    println(model.getUIState());
     tui.print(model.getUIState());
 }}

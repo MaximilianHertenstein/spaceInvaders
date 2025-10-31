@@ -5,7 +5,7 @@ import java.util.List;
 public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject,Shooting {
 
     Player(V2 pos){
-        this(new MovableGameObject(pos, List.of("Player")));
+        this(new MovableGameObject(pos, List.of("_/MM\\_", "qWAAWp")));
     }
 
     @Override

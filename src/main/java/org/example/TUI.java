@@ -23,7 +23,7 @@ public class TUI {
         this.rows = rows;
         this.screen = new DefaultTerminalFactory().setPreferTerminalEmulator(true).setInitialTerminalSize(new TerminalSize(cols + 2, rows + 2))
                 .setTerminalEmulatorFontConfiguration(
-                        SwingTerminalFontConfiguration.getDefaultOfSize(30)
+                        SwingTerminalFontConfiguration.getDefaultOfSize(20)
                 ).createScreen();
 
         screen.startScreen();

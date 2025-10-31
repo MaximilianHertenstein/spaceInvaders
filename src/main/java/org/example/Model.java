@@ -11,6 +11,8 @@ public class Model {
     List<BasicGameObject> blocks;
     int width;
     int height;
+    V2 aliensDirection;
+    int lives;
 
 
 
@@ -27,8 +29,8 @@ public class Model {
     public Model() {
         this.aliens = Alien.createAliens();
         width = 40;
-        height = 40;
-        this.player = new Player(new V2(20,40));
+        height = 27;
+        this.player = new Player(new V2(20,25));
         this.playerBullet = null;
         this.alienBullets = List.of();
         this.blocks = List.of();
