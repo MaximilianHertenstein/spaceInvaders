@@ -19,6 +19,13 @@ public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject,
     }
 
     @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return mgo.isAlive(gameObjects, width, height);
+    }
+
+
+
+    @Override
     public Movable move(V2 dir) {
         return mgo.move(dir);
     }

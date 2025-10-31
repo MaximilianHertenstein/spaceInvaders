@@ -25,4 +25,9 @@ public record MovableGameObject(BasicGameObject basicGameObject) implements Mova
     public HitBox hitBox() {
         return basicGameObject.hitBox();
     }
+
+    @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return basicGameObject.isAlive(gameObjects, width, height);
+    }
 }

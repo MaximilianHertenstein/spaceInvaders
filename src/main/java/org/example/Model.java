@@ -46,10 +46,10 @@ public class Model {
         return acc;
     }
 
-    List<MovableGameObject> move(List<MovableGameObject> mgos, V2 dir){
-        var res = new ArrayList<MovableGameObject>();
+    public <T extends Movable> List<T> move(List<T> mgos, V2 dir) {
+        var res = new ArrayList<T>();
         for (var mgo : mgos){
-            res.add(mgo.move(dir));
+            res.add((T) mgo.move(dir));
         }
         return res;
     }
@@ -58,13 +58,25 @@ public class Model {
     public void move(char dir){
         playerBullet = playerBullet.move(new V2(0,-1));
         alienBullets = move(alienBullets, new V2(0,1));
-        //player = player.move(Utils.charToV2(dir));
+        aliens = move(aliens, aliensDirection);
+        player = (Player) player.move(Utils.charToV2(dir));
     }
 
     public List<StringWithLocation>  getUIState(){
         return Utils.getStringsWithLocation(gameObjects());
     }
 
+    public  <T extends  IBasicGameObject>  List<T>  removeDeadObjects( List<T> objectsToFilter ){
+
+
+        var x =  Utils.removeDeadObjects(width,height,  blocks, gameObjects());
+        return (List<T>) x;
+    }
+
+
+    public void removeDeadObjects(){
+        blocks = Utils.removeDeadObjects(width,height,  blocks, gameObjects());
+    }
 
 
 

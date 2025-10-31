@@ -14,7 +14,7 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
 
     boolean checkCollision(List<IBasicGameObject>   others){
         for (var other : others) {
-            if (checkCollision(other)) {
+            if (other != this &&  checkCollision(other)) {
                 return true;
             }
         }
@@ -38,4 +38,14 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
     public HitBox hitBox() {
         return new HitBox(pos, displayStrings.getFirst().length(), displayStrings.size());
     }
+
+    @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return isOnBoard(width, height) && !checkCollision(gameObjects);
+    }
+
+    private boolean isOnBoard(int width, int height) {
+        return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
+    }
+
 }

@@ -22,4 +22,15 @@ public class Utils {
     }
 
 
+    static <T extends  IBasicGameObject>  List<T> removeDeadObjects(int width, int height, List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects){
+        var acc = new ArrayList<T>();
+        for( var go : gameObjectsToFilter){
+            if (go.isAlive(allGameObjects,width,height)){
+                acc.add(go);
+            }
+        }
+        return acc;
+    }
+
+
 }

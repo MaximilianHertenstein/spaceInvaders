@@ -27,6 +27,13 @@ public record Alien(MovableGameObject mgo, int score, int id) implements Movable
     }
 
     @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return mgo.isAlive(gameObjects, width, height);
+    }
+
+
+
+    @Override
     public MovableGameObject shoot() {
         return new MovableGameObject(hitBox().pos().plus(new V2(0,1)), List.of("|", "ˇ"));
     }
