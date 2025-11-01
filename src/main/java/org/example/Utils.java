@@ -52,7 +52,7 @@ public class Utils {
     }
 
 
-    public static V2 computeNextAlienDirection(List<Alien> aliens, int width, V2 currentDirection){
+    public static V2 computeNextAlienDirection(List<Alien> aliens, V2 currentDirection, int width){
         if (currentDirection.equals(new V2(1,0) )&& getXCoordinates(aliens).contains(width-4) || currentDirection.equals(new V2(-1,0) )&& getXCoordinates(aliens).contains(0)){
             return new V2(0,1);
         }
@@ -103,15 +103,21 @@ public class Utils {
         return acc;
     }
 
-    static AlienRocket getRandomAlienShot(List<Alien> aliens){
-        if (aliens.isEmpty()) return null;
+
+    public static boolean isOnBoard(V2 pos, int width, int height) {
+
+        return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
+    }
+
+    static AlienRocket getRocketOfRandomAlien(List<Alien> aliens){
         var aliensInLowestLine = getLowestAliens(aliens);
+        if (aliensInLowestLine.isEmpty()) return null;
         var random = new Random();
         var index = random.nextInt(aliensInLowestLine.size());
         return aliensInLowestLine.get(index).shoot();
     }
 
-    static <T extends  IBasicGameObject>  List<T> removeDeadObjects(int width, int height, List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects){
+    static <T extends  IBasicGameObject>  List<T> removeDeadObjects(List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects,int width, int height){
         var acc = new ArrayList<T>();
         for( var go : gameObjectsToFilter){
             if (go.isAlive(allGameObjects,width,height)){
@@ -121,9 +127,6 @@ public class Utils {
         return acc;
     }
 
-
-
-
     public static <T extends Rocket> List<T> move(List<T> rockets) {
         var res = new ArrayList<T>();
         for (var rocket : rockets){
@@ -131,6 +134,4 @@ public class Utils {
         }
         return res;
     }
-
-
 }

@@ -62,9 +62,9 @@ public class Model {
 
 
     public void removeDeadObjects(){
-        var newBlocks = Utils.removeDeadObjects(width,height,  blocks, gameObjects());
-        var newAliens = Utils.removeDeadObjects(width,height,  aliens, gameObjects());
-        var newAlienBullets = Utils.removeDeadObjects(width,height,  alienBullets, gameObjects());
+        var newBlocks = Utils.removeDeadObjects(blocks, gameObjects(), width,height);
+        var newAliens = Utils.removeDeadObjects(aliens, gameObjects(), width,height);
+        var newAlienBullets = Utils.removeDeadObjects(alienBullets, gameObjects(), width,height);
         if (playerBullet!= null &&  !playerBullet.isAlive(gameObjects(),width,height)){
             playerBullet = null;
         }
@@ -78,15 +78,16 @@ public class Model {
     void update(char dir){
         move(dir);
         removeDeadObjects();
-
-
-        aliensDirection = Utils.computeNextAlienDirection(aliens, width, aliensDirection);
+        aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
         if (dir == 'k' && playerBullet == null){
             playerBullet = player.shoot();
         }
         countDown.countDown();
         if (countDown.finished()) {
-            alienBullets.add(Utils.getRandomAlienShot(aliens));
+            var rocket = Utils.getRocketOfRandomAlien(aliens);
+            if (rocket != null) {
+                alienBullets.add(Utils.getRocketOfRandomAlien(aliens));
+            }
             countDown.reset();
         }
     }

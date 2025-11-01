@@ -11,14 +11,14 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
         return hitBox().intersects(other.hitBox());
     }
 
-    boolean checkCollision(List<IBasicGameObject>   others){
+    int countCollisions(List<IBasicGameObject>   others){
         var count = 0;
         for (var other : others) {
             if (checkCollision(other)) {
                 count++;
             }
         }
-        return count > 1;
+        return count;
     }
 
 
@@ -41,11 +41,8 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
 
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return isOnBoard(width, height) && !checkCollision(gameObjects);
+        return Utils.isOnBoard(pos, width, height) && !(countCollisions(gameObjects)  > 1);
     }
 
-    private boolean isOnBoard(int width, int height) {
-        return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
-    }
 
 }
