@@ -57,7 +57,7 @@ public class TUI {
 
     public char getPressedKey() throws IOException {
         var input = screen.pollInput();
-        if (input != null) {
+        if (input != null && input.getCharacter() != null) {
             return input.getCharacter();
         }
         return ' ';

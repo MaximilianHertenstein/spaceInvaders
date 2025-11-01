@@ -3,16 +3,16 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Alien(MovableGameObject mgo, int score, int id) implements Movable,IBasicGameObject {
+public record Alien(MovableGameObject mgo, int score) implements Movable,IBasicGameObject {
 
 
-    Alien(V2 pos, List<String> displayStrings, int  score, int id){
-        this(new MovableGameObject(pos, displayStrings), score, id);
+    Alien(V2 pos, List<String> displayStrings, int  score){
+        this(new MovableGameObject(pos, displayStrings), score);
     }
 
     @Override
     public Alien move(V2 dir) {
-        return new Alien(mgo.move(dir), score, id);
+        return new Alien(mgo.move(dir), score);
     }
 
 
@@ -20,6 +20,7 @@ public record Alien(MovableGameObject mgo, int score, int id) implements Movable
     public List<StringWithLocation> show() {
         return mgo.show();
     }
+
 
     @Override
     public HitBox hitBox() {
@@ -33,8 +34,8 @@ public record Alien(MovableGameObject mgo, int score, int id) implements Movable
 
 
 
-    public MovableGameObject shoot() {
-        return new MovableGameObject(hitBox().pos().plus(new V2(0,1)), List.of("|", "ˇ"));
+    public AlienRocket shoot() {
+        return new AlienRocket(hitBox().pos().plus(new V2(0,2)));
     }
 
 
@@ -55,9 +56,7 @@ public record Alien(MovableGameObject mgo, int score, int id) implements Movable
             var x = 36 - col* 4;
             var y = 8 - row * 4;
             var pos = new V2(x, y);
-            int id =   (row*10+col);
-
-            res.add(new Alien(pos, rowToAlienStrings(row), 10 * (row + 1), id)  );
+            res.add(new Alien(pos, rowToAlienStrings(row), 10 * (row + 1))  );
 
         }
         }return res;

@@ -7,18 +7,18 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
 
 
 
-
     boolean checkCollision(IBasicGameObject other){
         return hitBox().intersects(other.hitBox());
     }
 
     boolean checkCollision(List<IBasicGameObject>   others){
+        var count = 0;
         for (var other : others) {
-            if (other != this &&  checkCollision(other)) {
-                return true;
+            if (checkCollision(other)) {
+                count++;
             }
         }
-        return false;
+        return count > 1;
     }
 
 

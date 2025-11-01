@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.List;
 
-public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject {
+public record Player(MovableGameObject mgo) implements IBasicGameObject {
 
     Player(V2 pos){
         this(new MovableGameObject(pos, List.of("_/MM\\_", "qWAAWp")));
@@ -12,6 +12,7 @@ public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject 
     public List<StringWithLocation> show() {
         return mgo.show();
     }
+
 
     @Override
     public HitBox hitBox() {
@@ -24,14 +25,14 @@ public record Player(MovableGameObject mgo) implements Movable,IBasicGameObject 
     }
 
 
+    public Player move(V2 dir, int width) {
 
-    @Override
-    public Movable move(V2 dir) {
+        if (dir.equals(new V2(1,0)) && hitBox().pos().x() == width + 1 - hitBox().width() || dir.equals(new V2(-1,0)) && hitBox().pos().x() == 0) { return this;}
         return new Player(mgo().move(dir));
     }
 
-    public MovableGameObject shoot() {
-        return new MovableGameObject(hitBox().pos().plus(new V2(0,-2)), List.of("|", "^"));
+    public PlayerRocket shoot() {
+        return new PlayerRocket(hitBox().pos().plus(new V2(0,-2)));
 
     }
 }

@@ -21,6 +21,8 @@ public record MovableGameObject(BasicGameObject basicGameObject) implements Mova
         return basicGameObject().show();
     }
 
+
+
     @Override
     public HitBox hitBox() {
         return basicGameObject.hitBox();
