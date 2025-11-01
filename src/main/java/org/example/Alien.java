@@ -3,14 +3,13 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Alien(MovableGameObject mgo, int score) implements Movable,IBasicGameObject {
+public record Alien(MovableGameObject mgo, int score) implements IBasicGameObject {
 
 
     Alien(V2 pos, List<String> displayStrings, int  score){
         this(new MovableGameObject(pos, displayStrings), score);
     }
 
-    @Override
     public Alien move(V2 dir) {
         return new Alien(mgo.move(dir), score);
     }

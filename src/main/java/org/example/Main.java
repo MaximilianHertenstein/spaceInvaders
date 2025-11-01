@@ -14,5 +14,6 @@ public class Main {
         var input = tui.getPressedKey();
         model.update(input);
     }
+    tui.printString(model.getEndMessage());
     tui.close();
 }}

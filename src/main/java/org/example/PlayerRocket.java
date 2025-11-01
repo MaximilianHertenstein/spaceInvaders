@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.List;
 
-public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, SelfMoving, Movable {
+public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, Rocket {
 
 
     PlayerRocket(V2 pos){
@@ -26,14 +26,8 @@ public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, S
     }
 
 
-
     @Override
-    public Movable move(V2 dir) {
-        return new PlayerRocket(mgo.move(dir));
-    }
-
-    @Override
-    public SelfMoving move() {
+    public Rocket move() {
         return new PlayerRocket(mgo.move(new V2(0,-1)));
     }
 }

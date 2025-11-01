@@ -9,20 +9,13 @@ public class Model {
     PlayerRocket playerBullet;
     List<AlienRocket> alienBullets;
     List<BasicGameObject> blocks;
-    int width;
-    int height;
+    final int width;
+    final int height;
     V2 aliensDirection;
     private boolean isAlive;
-    CountDown countDown;
+    final CountDown countDown;
 
 
-//    public Model(List<Alien> aliens, Player player, MovableGameObject playerBullet, List<MovableGameObject> alienBullets, List<BasicGameObject> blocks) {
-//        this.aliens = aliens;
-//        this.player = player;
-//        this.playerBullet = playerBullet;
-//        this.alienBullets = alienBullets;
-//        this.blocks = blocks;
-//    }
 
 
 
@@ -56,9 +49,9 @@ public class Model {
 
     public void move(char dir){
         if (playerBullet != null){
-            playerBullet = (PlayerRocket) playerBullet.move(new V2(0,-1));
+            playerBullet = (PlayerRocket) playerBullet.move();
         }
-        alienBullets = Utils.move(alienBullets, new V2(0,1));
+        alienBullets = Utils.move(alienBullets);
         aliens = Utils.move(aliens, aliensDirection);
         player = player.move(Utils.charToV2(dir),width);
     }
@@ -66,13 +59,6 @@ public class Model {
     public List<StringWithLocation>  getUIState(){
         return Utils.getStringsWithLocation(gameObjects());
     }
-//
-//    public <T extends IBasicGameObject> List<T> removeDeadObjects(List<T> objectsToFilter ){
-//
-//
-//         List<T> x = Utils.removeDeadObjects(width,height, blocks, gameObjects());
-//        return (List<T>) x;
-//    }
 
 
     public void removeDeadObjects(){
@@ -116,5 +102,16 @@ public class Model {
 
     public boolean gameOngoing() {
         return !gameWon() && !gameLost();
+    }
+
+
+    public String getEndMessage(){
+        if (gameLost()){
+            return "You lost";
+        }
+        if (gameWon()){
+            return "You won";
+        }
+        return "Error!";
     }
 }

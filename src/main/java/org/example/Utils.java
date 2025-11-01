@@ -14,32 +14,25 @@ public class Utils {
         };
     }
 
-    public static List<StringWithLocation>  getStringsWithLocation(List<IBasicGameObject> bgos) {
+
+    public static List<Alien> move(List<Alien> aliens, V2 dir) {
+        var res = new ArrayList<Alien>();
+        for (var mgo : aliens){
+            res.add( mgo.move(dir));
+        }
+        return res;
+    }
+
+
+
+    public static List<StringWithLocation>  getStringsWithLocation(List<IBasicGameObject> basicGameObjects) {
         var acc = new ArrayList<StringWithLocation>();
-        for (var bgo: bgos){
+        for (var bgo: basicGameObjects){
             acc.addAll(bgo.show());
         }
         return acc;
     }
 
-
-    static <T extends  IBasicGameObject>  List<T> removeDeadObjects(int width, int height, List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects){
-        var acc = new ArrayList<T>();
-        for( var go : gameObjectsToFilter){
-            if (go.isAlive(allGameObjects,width,height)){
-                acc.add(go);
-            }
-        }
-        return acc;
-    }
-
-    public static <T extends Movable> List<T> move(List<T> movableGameObjects, V2 dir) {
-        var res = new ArrayList<T>();
-        for (var mgo : movableGameObjects){
-            res.add((T) mgo.move(dir));
-        }
-        return res;
-    }
 
     public static List<Integer> getXCoordinates(List<Alien>aliens){
         var acc = new ArrayList<Integer>();
@@ -48,6 +41,7 @@ public class Utils {
         }
         return acc;
     }
+
 
     public static List<Integer> getYCoordinates(List<Alien>aliens){
         var acc = new ArrayList<Integer>();
@@ -67,7 +61,7 @@ public class Utils {
 
         }
         if(currentDirection.equals(new V2(0,1) )&& getXCoordinates(aliens).contains(0)){
-        return new V2(1,0);}
+            return new V2(1,0);}
 
         return currentDirection;
     }
@@ -75,27 +69,6 @@ public class Utils {
     public static boolean aliensAreInLastLine(List<Alien> aliens, int height){
         return getYCoordinates(aliens).contains(height -2);
     }
-
-    static List<Alien> getLowestAliens(List<Alien> aliens){
-        if (aliens.isEmpty()) return List.of();
-        int lowestLine = aliens.get(0).hitBox().pos().y();
-        var acc = new ArrayList<Alien>();
-        for (var alien: aliens){
-            if (alien.hitBox().pos().y() == lowestLine){
-                acc.add(alien);
-            }
-        }
-        return acc;
-    }
-
-    static AlienRocket getRandomAlienShot(List<Alien> aliens){
-        if (aliens.isEmpty()) return null;
-        var aliensInLowestLine = getLowestAliens(aliens);
-        var random = new Random();
-        var index = random.nextInt(aliensInLowestLine.size());
-        return aliensInLowestLine.get(index).shoot();
-    }
-
 
     public static List<BasicGameObject> generateBlock(V2 pos, int width, int height) {
         var acc = new ArrayList<BasicGameObject>();
@@ -116,5 +89,48 @@ public class Utils {
         }
         return acc;
     }
+
+
+    static List<Alien> getLowestAliens(List<Alien> aliens){
+        if (aliens.isEmpty()) return List.of();
+        int lowestLine = aliens.getFirst().hitBox().pos().y();
+        var acc = new ArrayList<Alien>();
+        for (var alien: aliens){
+            if (alien.hitBox().pos().y() == lowestLine){
+                acc.add(alien);
+            }
+        }
+        return acc;
+    }
+
+    static AlienRocket getRandomAlienShot(List<Alien> aliens){
+        if (aliens.isEmpty()) return null;
+        var aliensInLowestLine = getLowestAliens(aliens);
+        var random = new Random();
+        var index = random.nextInt(aliensInLowestLine.size());
+        return aliensInLowestLine.get(index).shoot();
+    }
+
+    static <T extends  IBasicGameObject>  List<T> removeDeadObjects(int width, int height, List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects){
+        var acc = new ArrayList<T>();
+        for( var go : gameObjectsToFilter){
+            if (go.isAlive(allGameObjects,width,height)){
+                acc.add(go);
+            }
+        }
+        return acc;
+    }
+
+
+
+
+    public static <T extends Rocket> List<T> move(List<T> rockets) {
+        var res = new ArrayList<T>();
+        for (var rocket : rockets){
+            res.add((T) rocket.move());
+        }
+        return res;
+    }
+
 
 }
