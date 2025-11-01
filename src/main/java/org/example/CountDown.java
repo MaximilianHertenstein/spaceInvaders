@@ -14,7 +14,9 @@ public class CountDown {
     }
 
     public void countDown(){
-        this.current -= 1;
+        if (current > 0) {
+            this.current -= 1;
+        }
     }
 
     public boolean finished(){

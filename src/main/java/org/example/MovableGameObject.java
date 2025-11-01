@@ -12,13 +12,10 @@ public record MovableGameObject(BasicGameObject basicGameObject) implements IBas
         return new MovableGameObject(hitBox().pos().plus(dir), basicGameObject.displayStrings());
     }
 
-
     @Override
     public List<StringWithLocation> show() {
         return basicGameObject().show();
     }
-
-
 
     @Override
     public HitBox hitBox() {

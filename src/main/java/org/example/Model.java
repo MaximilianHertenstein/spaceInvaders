@@ -6,15 +6,14 @@ import java.util.List;
 public class Model {
     List<Alien> aliens;
     Player player;
-    PlayerRocket playerBullet;
-    List<AlienRocket> alienBullets;
+    List<Rocket> rockets;
     List<BasicGameObject> blocks;
     final int width;
     final int height;
     V2 aliensDirection;
     private boolean isAlive;
-    final CountDown countDown;
-
+    final CountDown alienRocketCountdown;
+    final CountDown superRocketCountDown;
 
 
 
@@ -24,73 +23,15 @@ public class Model {
         this.height = height;
         this.aliens = Alien.createAliens();
         this.player = new Player(new V2(width/2,height -2));
-        this.playerBullet = null;
-        this.alienBullets = List.of();
+        //this.playerBullet = null;
+        this.rockets = new ArrayList<>();
         this.blocks = Utils.generateBlocks(new V2(1, 3 * height/4),4,3, width/8);
         this.aliensDirection = new V2(1,0);
         this.isAlive = true;
-        this.countDown = new CountDown(5);
+        this.alienRocketCountdown = new CountDown(5);
+        this.superRocketCountDown = new CountDown(10);
     }
 
-
-    List<IBasicGameObject> gameObjects(){
-        var acc = new ArrayList<IBasicGameObject>();
-        acc.addAll(blocks);
-        acc.addAll(aliens);
-        acc.addAll(alienBullets);
-        acc.add(player);
-        if( playerBullet != null){
-            acc.add(playerBullet);}
-        return acc;
-    }
-
-
-
-
-    public void move(char dir){
-        if (playerBullet != null){
-            playerBullet = (PlayerRocket) playerBullet.move();
-        }
-        alienBullets = Utils.move(alienBullets);
-        aliens = Utils.move(aliens, aliensDirection);
-        player = player.move(Utils.charToV2(dir),width);
-    }
-
-    public List<StringWithLocation>  getUIState(){
-        return Utils.getStringsWithLocation(gameObjects());
-    }
-
-
-    public void removeDeadObjects(){
-        var newBlocks = Utils.removeDeadObjects(blocks, gameObjects(), width,height);
-        var newAliens = Utils.removeDeadObjects(aliens, gameObjects(), width,height);
-        var newAlienBullets = Utils.removeDeadObjects(alienBullets, gameObjects(), width,height);
-        if (playerBullet!= null &&  !playerBullet.isAlive(gameObjects(),width,height)){
-            playerBullet = null;
-        }
-        isAlive = player.isAlive(gameObjects(),width,height);
-        blocks = newBlocks;
-        aliens = newAliens;
-        alienBullets = newAlienBullets;
-    }
-
-
-    void update(char dir){
-        move(dir);
-        removeDeadObjects();
-        aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
-        if (dir == 'k' && playerBullet == null){
-            playerBullet = player.shoot();
-        }
-        countDown.countDown();
-        if (countDown.finished()) {
-            var rocket = Utils.getRocketOfRandomAlien(aliens);
-            if (rocket != null) {
-                alienBullets.add(Utils.getRocketOfRandomAlien(aliens));
-            }
-            countDown.reset();
-        }
-    }
 
     boolean gameWon(){
         return aliens.isEmpty();
@@ -115,4 +56,58 @@ public class Model {
         }
         return "Error!";
     }
+
+
+    List<IBasicGameObject> gameObjects(){
+        var acc = new ArrayList<IBasicGameObject>();
+        acc.addAll(blocks);
+        acc.addAll(aliens);
+        acc.addAll(rockets);
+        acc.add(player);
+        return acc;
+    }
+
+
+    public void move(char dir){
+        rockets = Utils.move(rockets);
+        aliens = Utils.move(aliens, aliensDirection);
+        player = player.move(Utils.charToV2(dir),width);
+    }
+
+    public List<StringWithLocation>  getUIState(){
+        return Utils.getStringsWithLocation(gameObjects());
+    }
+
+
+    public void removeDeadObjects(){
+        var newBlocks = Utils.removeDeadObjects(blocks, gameObjects(), width,height);
+        var newAliens = Utils.removeDeadObjects(aliens, gameObjects(), width,height);
+        var newRockets = Utils.removeDeadObjects(rockets, gameObjects(), width,height);
+        isAlive = player.isAlive(gameObjects(),width,height);
+        blocks = newBlocks;
+        aliens = newAliens;
+        rockets = newRockets;
+    }
+
+    void update(char key){
+        move(key);
+        removeDeadObjects();
+        aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
+        if (key == 'k' && !Utils.containsPlayerRocket(rockets)){
+            rockets.add(player.shoot());
+        }
+        if (key == 'l' && !Utils.containsPlayerRocket(rockets)){
+            rockets.add(player.shootSuperRocket());
+        }
+        alienRocketCountdown.countDown();
+        if (alienRocketCountdown.finished()) {
+            var rocket = Utils.getRocketOfRandomAlien(aliens);
+            if (rocket != null) {
+                rockets.add(rocket);
+            }
+            alienRocketCountdown.reset();
+        }
+    }
+
+
 }

@@ -26,13 +26,6 @@ public record Alien(MovableGameObject mgo, int score) implements IBasicGameObjec
         return mgo.hitBox();
     }
 
-    @Override
-    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return mgo.isAlive(gameObjects, width, height);
-    }
-
-
-
     public AlienRocket shoot() {
         return new AlienRocket(hitBox().pos().plus(new V2(0,2)));
     }
@@ -51,16 +44,26 @@ public record Alien(MovableGameObject mgo, int score) implements IBasicGameObjec
     public static  List<Alien>createAliens (){
         var res = new ArrayList<Alien>();
         for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < 10; col++) {
-            var x = 36 - col* 4;
-            var y = 8 - row * 4;
-            var pos = new V2(x, y);
-            res.add(new Alien(pos, rowToAlienStrings(row), 10 * (row + 1))  );
+            for (int col = 0; col < 10; col++) {
+                var x = 36 - col* 4;
+                var y = 8 - row * 4;
+                var pos = new V2(x, y);
+                res.add(new Alien(pos, rowToAlienStrings(row), 10 * (row + 1))  );
 
-        }
+            }
         }return res;
 
     }
+
+    @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return mgo.isAlive(gameObjects, width, height);
+    }
+
+
+
+
+
 
 
 

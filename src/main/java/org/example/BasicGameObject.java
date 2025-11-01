@@ -7,24 +7,6 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
 
 
 
-    boolean checkCollision(IBasicGameObject other){
-        return hitBox().intersects(other.hitBox());
-    }
-
-    int countCollisions(List<IBasicGameObject>   others){
-        var count = 0;
-        for (var other : others) {
-            if (checkCollision(other)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-
-
-
-
     @Override
     public  List<StringWithLocation> show(){
         var acc = new ArrayList<StringWithLocation>();
@@ -39,10 +21,26 @@ public record BasicGameObject(V2 pos, List<String> displayStrings) implements IB
         return new HitBox(pos, displayStrings.getFirst().length(), displayStrings.size());
     }
 
+
+
+
+    boolean checkCollision(IBasicGameObject other){
+        return hitBox().intersects(other.hitBox());
+    }
+
+    int countCollisions(List<IBasicGameObject>   others){
+        var count = 0;
+        for (var other : others) {
+            if (checkCollision(other)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
         return Utils.isOnBoard(pos, width, height) && !(countCollisions(gameObjects)  > 1);
     }
-
 
 }

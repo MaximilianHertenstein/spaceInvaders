@@ -15,6 +15,11 @@ public class Utils {
     }
 
 
+    public static boolean isOnBoard(V2 pos, int width, int height) {
+        return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
+    }
+
+
     public static List<Alien> move(List<Alien> aliens, V2 dir) {
         var res = new ArrayList<Alien>();
         for (var mgo : aliens){
@@ -103,12 +108,6 @@ public class Utils {
         return acc;
     }
 
-
-    public static boolean isOnBoard(V2 pos, int width, int height) {
-
-        return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
-    }
-
     static AlienRocket getRocketOfRandomAlien(List<Alien> aliens){
         var aliensInLowestLine = getLowestAliens(aliens);
         if (aliensInLowestLine.isEmpty()) return null;
@@ -116,6 +115,18 @@ public class Utils {
         var index = random.nextInt(aliensInLowestLine.size());
         return aliensInLowestLine.get(index).shoot();
     }
+
+
+
+    static boolean containsPlayerRocket(List<Rocket> rockets){
+        for (var rocket : rockets){
+            if (rocket.isPlayerRocket()){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     static <T extends  IBasicGameObject>  List<T> removeDeadObjects(List<T> gameObjectsToFilter, List<IBasicGameObject> allGameObjects,int width, int height){
         var acc = new ArrayList<T>();

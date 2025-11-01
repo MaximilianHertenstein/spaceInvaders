@@ -19,13 +19,19 @@ public record AlienRocket(MovableGameObject mgo) implements IBasicGameObject, Ro
     }
 
     @Override
-    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return mgo.isAlive(gameObjects, width, height);
+    public boolean isPlayerRocket() {
+        return false;
     }
-
 
     @Override
     public Rocket move() {
         return new AlienRocket(mgo.move(new V2(0,1)));
     }
+
+    @Override
+    public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
+        return mgo.isAlive(gameObjects, width, height);
+    }
+
+
 }

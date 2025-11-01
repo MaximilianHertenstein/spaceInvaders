@@ -1,5 +1,6 @@
 package org.example;
 
-public interface Rocket {
+public interface Rocket extends IBasicGameObject {
     Rocket move();
+    boolean isPlayerRocket();
 }
