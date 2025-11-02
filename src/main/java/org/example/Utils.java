@@ -118,13 +118,13 @@ public class Utils {
 
 
 
-    static boolean containsPlayerRocket(List<Rocket> rockets){
+    static boolean containsNoPlayerRocket(List<Rocket> rockets){
         for (var rocket : rockets){
             if (rocket.isPlayerRocket()){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
 

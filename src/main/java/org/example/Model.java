@@ -93,10 +93,10 @@ public class Model {
         move(key);
         removeDeadObjects();
         aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
-        if (key == 'k' && !Utils.containsPlayerRocket(rockets)){
+        if (key == 'k' && Utils.containsNoPlayerRocket(rockets)){
             rockets.add(player.shoot());
         }
-        if (key == 'l' && !Utils.containsPlayerRocket(rockets)){
+        if (key == 'l' && Utils.containsNoPlayerRocket(rockets)){
             rockets.add(player.shootSuperRocket());
         }
         alienRocketCountdown.countDown();
