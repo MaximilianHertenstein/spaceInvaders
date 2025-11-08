@@ -5,7 +5,12 @@ import java.util.List;
 public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, Rocket {
 
     PlayerRocket(V2 pos){
-        this(new MovableGameObject(pos,List.of("|", "^")));
+        this(new MovableGameObject(pos,"|\n^"));
+    }
+
+    @Override
+    public V2 pos() {
+        return mgo.pos();
     }
 
     @Override
@@ -14,7 +19,7 @@ public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, R
     }
 
     @Override
-    public HitBox hitBox() {
+    public List<V2> hitBox() {
         return mgo.hitBox();
     }
 

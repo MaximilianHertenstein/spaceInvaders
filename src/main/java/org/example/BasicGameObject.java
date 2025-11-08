@@ -3,29 +3,35 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record BasicGameObject(V2 pos, List<String> displayStrings) implements IBasicGameObject {
+public record BasicGameObject(V2 pos, String displayString) implements IBasicGameObject {
 
 
 
     @Override
     public  List<StringWithLocation> show(){
+        var lines = displayString.lines().toList();
         var acc = new ArrayList<StringWithLocation>();
-        for (int i = 0; i < displayStrings.size(); i++) {
-            acc.add(new StringWithLocation(displayStrings.get(i), pos.plus(new V2(0, i))));
+        for (int i = 0; i < lines.size(); i++) {
+            acc.add(new StringWithLocation(lines.get(i), pos.plus(new V2(0, i))));
         }
         return acc;
     }
 
-    @Override
-    public HitBox hitBox() {
-        return new HitBox(pos, displayStrings.getFirst().length(), displayStrings.size());
+    public  List<V2> hitBox() {
+        var acc = new ArrayList<V2>();
+        for (var stringWithLocation : show()) {
+            for (int i = 0; i < stringWithLocation.string().length(); i++) {
+                acc.add(stringWithLocation.location().plus(new V2(i, 0)));
+            }
+        }
+        return acc;
     }
 
 
 
 
     boolean checkCollision(IBasicGameObject other){
-        return hitBox().intersects(other.hitBox());
+        return Utils.intersect(hitBox(),other.hitBox());
     }
 
     int countCollisions(List<IBasicGameObject>   others){

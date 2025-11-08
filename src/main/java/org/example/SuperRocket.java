@@ -6,8 +6,12 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
 
 
     SuperRocket(V2 pos){
-        var playerRocket = new PlayerRocket(new MovableGameObject(pos,List.of("/+\\", "|||", "|||", "|||","|||")));
+        var playerRocket = new PlayerRocket(new MovableGameObject(pos,"/|\\\n|||\n|||\n|||\n|||"));
         this(playerRocket);
+    }
+    @Override
+    public V2 pos() {
+        return playerRocket.pos();
     }
 
     @Override
@@ -20,18 +24,20 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
         return true;
     }
 
+
+
     @Override
     public List<StringWithLocation> show() {
         return playerRocket.show();
     }
 
     @Override
-    public HitBox hitBox() {
+    public List<V2> hitBox() {
         return playerRocket.hitBox();
     }
 
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return Utils.isOnBoard(playerRocket.hitBox().pos(), width, height);
+        return Utils.isOnBoard(playerRocket.pos(), width, height);
     }
 }

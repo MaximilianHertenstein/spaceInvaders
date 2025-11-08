@@ -4,13 +4,20 @@ import java.util.List;
 
 public record MovableGameObject(BasicGameObject basicGameObject) implements IBasicGameObject{
 
-    public MovableGameObject(V2 pos, List<String> displayStrings) {
-        this(new BasicGameObject(pos,displayStrings));
+    public MovableGameObject(V2 pos, String displayString) {
+        this(new BasicGameObject(pos,displayString));
+    }
+
+    @Override
+    public V2 pos() {
+        return basicGameObject.pos();
     }
 
     public MovableGameObject move(V2 dir){
-        return new MovableGameObject(hitBox().pos().plus(dir), basicGameObject.displayStrings());
+        return new MovableGameObject(pos().plus(dir), basicGameObject.displayString());
     }
+
+
 
     @Override
     public List<StringWithLocation> show() {
@@ -18,7 +25,7 @@ public record MovableGameObject(BasicGameObject basicGameObject) implements IBas
     }
 
     @Override
-    public HitBox hitBox() {
+    public List<V2> hitBox() {
         return basicGameObject.hitBox();
     }
 

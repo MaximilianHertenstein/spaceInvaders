@@ -3,11 +3,11 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Alien(MovableGameObject mgo, int score) implements IBasicGameObject {
+public record Alien(MovableGameObject mgo, int score) implements IBasicGameObject, Shooting {
 
 
-    Alien(V2 pos, List<String> displayStrings, int  score){
-        this(new MovableGameObject(pos, displayStrings), score);
+    Alien(V2 pos, String displayString, int  score){
+        this(new MovableGameObject(pos, displayString), score);
     }
 
     public Alien move(V2 dir) {
@@ -22,20 +22,25 @@ public record Alien(MovableGameObject mgo, int score) implements IBasicGameObjec
 
 
     @Override
-    public HitBox hitBox() {
+    public List<V2> hitBox() {
         return mgo.hitBox();
     }
 
+    @Override
+    public V2 pos() {
+        return mgo.pos();
+    }
+
     public AlienRocket shoot() {
-        return new AlienRocket(hitBox().pos().plus(new V2(0,2)));
+        return new AlienRocket(pos().plus(new V2(0,2)));
     }
 
 
-    static List<String> rowToAlienStrings(int i){
+    static String rowToAlienStrings(int i){
         return switch (i){
-            case 2 -> List.of("{@@}","/\"\"\\") ;
-            case 1 -> List.of("/MM\\","\\~~/");
-            case 0 -> List.of("{OO}","/VV\\");
+            case 2 -> "{@@}\n/\"\"\\" ;
+            case 1 -> "/MM\\\n\\~~/";
+            case 0 -> "{OO}\n/VV\\";
             default -> throw new IllegalStateException("Unexpected value: " + i);
         };
 

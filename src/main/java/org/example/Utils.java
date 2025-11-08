@@ -6,6 +6,15 @@ import java.util.Random;
 
 public class Utils {
 
+    public static <T> boolean intersect(List<T> xs, List<T> ys) {
+        for (var x : xs){
+            if (ys.contains(x)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public  static V2 charToV2(char dir) {
         return switch (dir){
             case  'a'->  new V2(-1,0);
@@ -42,7 +51,7 @@ public class Utils {
     public static List<Integer> getXCoordinates(List<Alien>aliens){
         var acc = new ArrayList<Integer>();
         for (var alien : aliens){
-            acc.add(alien.hitBox().pos().x());
+            acc.add(alien.pos().x());
         }
         return acc;
     }
@@ -51,7 +60,7 @@ public class Utils {
     public static List<Integer> getYCoordinates(List<Alien>aliens){
         var acc = new ArrayList<Integer>();
         for (var alien : aliens){
-            acc.add(alien.hitBox().pos().y());
+            acc.add(alien.pos().y());
         }
         return acc;
     }
@@ -79,7 +88,7 @@ public class Utils {
         var acc = new ArrayList<BasicGameObject>();
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
-                acc.add(new BasicGameObject(pos.plus(new V2(x, y)), List.of("#")));
+                acc.add(new BasicGameObject(pos.plus(new V2(x, y)), "#"));
             }
         }
         return acc;
@@ -98,10 +107,10 @@ public class Utils {
 
     static List<Alien> getLowestAliens(List<Alien> aliens){
         if (aliens.isEmpty()) return List.of();
-        int lowestLine = aliens.getFirst().hitBox().pos().y();
+        int lowestLine = aliens.getFirst().pos().y();
         var acc = new ArrayList<Alien>();
         for (var alien: aliens){
-            if (alien.hitBox().pos().y() == lowestLine){
+            if (alien.pos().y() == lowestLine){
                 acc.add(alien);
             }
         }
@@ -115,7 +124,6 @@ public class Utils {
         var index = random.nextInt(aliensInLowestLine.size());
         return aliensInLowestLine.get(index).shoot();
     }
-
 
 
     static boolean containsNoPlayerRocket(List<Rocket> rockets){
@@ -145,4 +153,9 @@ public class Utils {
         }
         return res;
     }
+
+    List<Shooting> getShootingObjects(){
+
+    }
+
 }
