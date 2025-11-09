@@ -6,7 +6,40 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
 
 
     SuperRocket(V2 pos){
-        var playerRocket = new PlayerRocket(new MovableGameObject(pos,"/|\\\n|||\n|||\n|||\n|||"));
+
+
+        var s =
+                     """
+                     #**
+                   :#****-
+                  #*.....**
+                 #:........*
+                ::...........
+                :.... : .....
+               :.. #****** ...
+               :..##*******...
+              ::.. ###**** ....
+              :.....##### .....
+              :................
+              ::...............
+              ::.....***.......
+             *::.....***.......*
+            ***::....***......***
+          *****::...#***#.....*****
+         ****###::..=***+....###****
+         **#    :::..***.....    #**
+         **      ::::#*#::::      **
+         *#       ***#*#***       #*
+         *#        :==*==:        #*
+                   :=====:
+                   ::===::
+                   :::=:::
+                    :::::
+                     :::
+         """;
+
+
+        var playerRocket = new PlayerRocket(new MovableGameObject(pos,s)); // "/|\\\n|||\n|||\n|||\n|||"));
         this(playerRocket);
     }
     @Override

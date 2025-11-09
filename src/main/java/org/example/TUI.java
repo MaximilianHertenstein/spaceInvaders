@@ -40,7 +40,7 @@ public class TUI {
         }
 
         screen.refresh();
-        sleep(70);
+        sleep(20);
     }
 
     public void close() throws IOException {

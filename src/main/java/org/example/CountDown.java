@@ -9,14 +9,15 @@ public class CountDown {
         this.current = start;
     }
 
-    public void reset(){
-        this.current = start;
-    }
 
     public void countDown(){
         if (current > 0) {
             this.current -= 1;
         }
+        else {
+            this.current = start;
+        }
+
     }
 
     public boolean finished(){

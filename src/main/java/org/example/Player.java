@@ -2,6 +2,8 @@ package org.example;
 
 import java.util.List;
 
+import static java.lang.IO.println;
+
 public record Player(MovableGameObject mgo) implements IBasicGameObject, Shooting {
 
     Player(V2 pos){
@@ -25,7 +27,8 @@ public record Player(MovableGameObject mgo) implements IBasicGameObject, Shootin
     }
 
     public Player move(V2 dir, int width) {
-        if (dir.equals(new V2(1,0)) && hitBox().contains(new V2(width -1, 0)) || dir.equals(new V2(-1,0)) && pos().x() == 0) { return this;}
+
+        if (dir.equals(new V2(1,0)) && pos().x() == width -4|| dir.equals(new V2(-1,0)) && pos().x() == 0) { return this;}
         return new Player(mgo().move(dir));
     }
 
@@ -33,9 +36,7 @@ public record Player(MovableGameObject mgo) implements IBasicGameObject, Shootin
         return new PlayerRocket(pos().plus(new V2(0,-2)));
     }
 
-    public SuperRocket shootSuperRocket() {
-        return new SuperRocket(pos().plus(new V2(0,-5)));
-    }
+
 
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {

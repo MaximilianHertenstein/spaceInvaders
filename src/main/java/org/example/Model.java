@@ -13,7 +13,7 @@ public class Model {
     V2 aliensDirection;
     private boolean isAlive;
     final CountDown alienRocketCountdown;
-    final CountDown superRocketCountDown;
+
 
 
 
@@ -29,7 +29,6 @@ public class Model {
         this.aliensDirection = new V2(1,0);
         this.isAlive = true;
         this.alienRocketCountdown = new CountDown(5);
-        this.superRocketCountDown = new CountDown(10);
     }
 
 
@@ -90,23 +89,11 @@ public class Model {
     }
 
     void update(char key){
+        alienRocketCountdown.countDown();
         move(key);
         removeDeadObjects();
         aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
-        if (key == 'k' && Utils.containsNoPlayerRocket(rockets)){
-            rockets.add(player.shoot());
-        }
-        if (key == 'l' && Utils.containsNoPlayerRocket(rockets)){
-            rockets.add(player.shootSuperRocket());
-        }
-        alienRocketCountdown.countDown();
-        if (alienRocketCountdown.finished()) {
-            var rocket = Utils.getRocketOfRandomAlien(aliens);
-            if (rocket != null) {
-                rockets.add(rocket);
-            }
-            alienRocketCountdown.reset();
-        }
+        rockets.addAll(Utils.getNewRockets(key, aliens, rockets, player, alienRocketCountdown.finished()));
     }
 
 
