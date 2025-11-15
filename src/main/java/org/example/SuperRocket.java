@@ -69,6 +69,8 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
         return playerRocket.hitBox();
     }
 
+
+    // the super rocket is always alive. it flyes to the edge of the board.
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
         return Utils.isOnBoard(playerRocket.pos(), width, height);

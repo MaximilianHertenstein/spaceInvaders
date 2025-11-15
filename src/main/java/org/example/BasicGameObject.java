@@ -11,8 +11,8 @@ public record BasicGameObject(V2 pos, String displayString) implements IBasicGam
     public  List<StringWithLocation> show(){
         var lines = displayString.lines().toList();
         var acc = new ArrayList<StringWithLocation>();
-        for (int i = 0; i < lines.size(); i++) {
-            acc.add(new StringWithLocation(lines.get(i), pos.plus(new V2(0, i))));
+        for (int rowIndex = 0; rowIndex < lines.size(); rowIndex++) {
+            acc.add(new StringWithLocation(lines.get(rowIndex), pos.plus(new V2(0, rowIndex))));
         }
         return acc;
     }
@@ -20,8 +20,8 @@ public record BasicGameObject(V2 pos, String displayString) implements IBasicGam
     public  List<V2> hitBox() {
         var acc = new ArrayList<V2>();
         for (var stringWithLocation : show()) {
-            for (int i = 0; i < stringWithLocation.string().length(); i++) {
-                acc.add(stringWithLocation.location().plus(new V2(i, 0)));
+            for (int colIndex = 0; colIndex < stringWithLocation.string().length(); colIndex++) {
+                acc.add(stringWithLocation.location().plus(new V2(colIndex, 0)));
             }
         }
         return acc;
@@ -34,19 +34,23 @@ public record BasicGameObject(V2 pos, String displayString) implements IBasicGam
         return Utils.intersect(hitBox(),other.hitBox());
     }
 
-    int countCollisions(List<IBasicGameObject>   others){
-        var count = 0;
-        for (var other : others) {
+    // returns true if there is more than one collision,
+    // the gameObject itself is not counted as a collision
+    // it is always passed in the list of all gameObjects
+    boolean checkCollision(List<IBasicGameObject>  all){
+        var collisionCount = 0;
+        for (var other : all) {
             if (checkCollision(other)) {
-                count++;
+                collisionCount++;
             }
         }
-        return count;
+        return collisionCount > 1;
     }
+
 
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return Utils.isOnBoard(pos, width, height) && !(countCollisions(gameObjects)  > 1);
+        return Utils.isOnBoard(hitBox(), width, height) && !(checkCollision(gameObjects));
     }
 
 }

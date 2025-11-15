@@ -10,7 +10,7 @@ public record AlienRocket(MovableGameObject mgo) implements IBasicGameObject, Ro
 
     @Override
     public V2 pos() {
-        return null;
+        return mgo.pos();
     }
 
     @Override

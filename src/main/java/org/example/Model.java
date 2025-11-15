@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-    List<Alien> aliens;
-    Player player;
-    List<Rocket> rockets;
-    List<BasicGameObject> blocks;
     final int width;
     final int height;
+
+    Player player;
     V2 aliensDirection;
+    List<BasicGameObject> blocks;
+    List<Alien> aliens;
     private boolean isAlive;
     final CountDown alienRocketCountdown;
+    List<Rocket> rockets;
+
+
+
 
 
 
@@ -47,13 +51,11 @@ public class Model {
 
 
     public String getEndMessage(){
-        if (gameLost()){
-            return "You lost";
-        }
+
         if (gameWon()){
-            return "You won";
+            return "You won!";
         }
-        return "Error!";
+        return "You lost!";
     }
 
 

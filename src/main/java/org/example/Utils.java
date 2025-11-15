@@ -28,6 +28,15 @@ public class Utils {
         return pos.x() >= 0 && pos.x() < width && pos.y() >= 0 && pos.y() < height;
     }
 
+    public static boolean isOnBoard(List<V2> pos, int width, int height) {
+        for (var p : pos){
+            if (!isOnBoard(p,width,height)){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static List<Alien> move(List<Alien> aliens, V2 dir) {
         var res = new ArrayList<Alien>();
@@ -36,10 +45,6 @@ public class Utils {
         }
         return res;
     }
-
-
-
-
 
 
     public static List<Integer> getXCoordinates(List<Alien>aliens){
@@ -93,7 +98,6 @@ public class Utils {
         for(int y = 0; y < count; y++){
             pos = pos.plus(new V2(width + 2, 0));
             acc.addAll(generateBlock(pos,width,height));
-
         }
         return acc;
     }
