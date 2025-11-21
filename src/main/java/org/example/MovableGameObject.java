@@ -33,4 +33,14 @@ public record MovableGameObject(BasicGameObject basicGameObject) implements IBas
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
         return basicGameObject.isAlive(gameObjects, width, height);
     }
+
+
+    boolean touchesLeftBorder() {
+        // hitbox touches x == 0
+        return Utils.getXCoordinates(hitBox()).contains(0);
+    }
+
+    boolean touchesRightBorder(int width) {
+        // hitbox touches the rightmost valid x coordinate
+        return Utils.getXCoordinates(hitBox()).contains(width -1); }
 }

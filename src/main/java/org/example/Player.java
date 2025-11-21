@@ -2,8 +2,6 @@ package org.example;
 
 import java.util.List;
 
-import static java.lang.IO.println;
-
 public record Player(MovableGameObject mgo) implements IBasicGameObject, Shooting {
 
     Player(V2 pos){
@@ -26,10 +24,21 @@ public record Player(MovableGameObject mgo) implements IBasicGameObject, Shootin
         return mgo.hitBox();
     }
 
-    public Player move(V2 dir, int width) {
-
-        if (dir.equals(new V2(1,0)) && pos().x() == width -4|| dir.equals(new V2(-1,0)) && pos().x() == 0) { return this;}
+    public Player move(V2 dir) {
         return new Player(mgo().move(dir));
+    }
+
+    private Player reactToBorder(int width) {
+       if (mgo.touchesRightBorder(width))
+           return  move(new V2(-1, 0));
+       else if (mgo.touchesLeftBorder())
+           return move(new V2(1, 0));
+       else
+           return this;
+    }
+
+    public Player moveBounded(V2 dir, int width) {
+        return move(dir).reactToBorder(width);
     }
 
     public PlayerRocket shoot() {

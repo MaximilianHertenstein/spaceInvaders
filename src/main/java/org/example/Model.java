@@ -4,54 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-    final int width;
-    final int height;
-
-    Player player;
-    V2 aliensDirection;
-    List<BasicGameObject> blocks;
-    List<Alien> aliens;
-    private boolean isAlive;
-    final CountDown alienRocketCountdown;
-    List<Rocket> rockets;
-
-
-
-
-
-
+    private final int width;
+    private final int height;
+    private Player player;
+    private AlienSwarm alienSwarm;
+    private List<BasicGameObject> blocks;
+    private List<Rocket> rockets;
 
 
     public Model(int width, int height) {
         this.width = width;
         this.height = height;
-        this.aliens = Alien.createAliens();
         this.player = new Player(new V2(width/2,height -2));
-        //this.playerBullet = null;
-        this.rockets = new ArrayList<>();
+        this.alienSwarm = new AlienSwarm();
         this.blocks = Utils.generateBlocks(new V2(1, 3 * height/4),4,3, width/8);
-        this.aliensDirection = new V2(1,0);
-        this.isAlive = true;
-        this.alienRocketCountdown = new CountDown(5);
+        this.rockets = new ArrayList<>();
+
     }
 
-
     boolean gameWon(){
-        return aliens.isEmpty();
+        return alienSwarm.noAliensLeft();
     }
 
     boolean gameLost(){
-        return  Utils.aliensAreInLastLine(aliens, height) || !isAlive;
+        return  alienSwarm.aliensAreInLastLine(height) || !playerIsAlive();
     }
 
+    private boolean playerIsAlive() {
+        return player.isAlive(gameObjects(),width,height);
+    }
 
     public boolean gameOngoing() {
         return !gameWon() && !gameLost();
     }
 
-
     public String getEndMessage(){
-
         if (gameWon()){
             return "You won!";
         }
@@ -59,20 +46,20 @@ public class Model {
     }
 
 
-    List<IBasicGameObject> gameObjects(){
+    private List<IBasicGameObject> gameObjects(){
         var acc = new ArrayList<IBasicGameObject>();
         acc.addAll(blocks);
-        acc.addAll(aliens);
+        acc.addAll(alienSwarm.aliens());
         acc.addAll(rockets);
         acc.add(player);
         return acc;
     }
 
 
-    public void move(char dir){
+    private void move(char dir){
         rockets = Utils.move(rockets);
-        aliens = Utils.move(aliens, aliensDirection);
-        player = player.move(Utils.charToV2(dir),width);
+        alienSwarm = alienSwarm.moveBounded(width);
+        player = player.moveBounded(Utils.charToV2(dir),width);
     }
 
     public List<StringWithLocation>  getUIState(){
@@ -80,22 +67,17 @@ public class Model {
     }
 
 
-    public void removeDeadObjects(){
-        var newBlocks = Utils.removeDeadObjects(blocks, gameObjects(), width,height);
-        var newAliens = Utils.removeDeadObjects(aliens, gameObjects(), width,height);
-        var newRockets = Utils.removeDeadObjects(rockets, gameObjects(), width,height);
-        isAlive = player.isAlive(gameObjects(),width,height);
-        blocks = newBlocks;
-        aliens = newAliens;
-        rockets = newRockets;
+    private void removeDeadObjects(){
+        List<IBasicGameObject> allGameObjects = gameObjects();
+        blocks = Utils.removeDeadObjects(blocks, allGameObjects, width,height);
+        alienSwarm = alienSwarm.removeDeadAliens(allGameObjects,width, height);
+        rockets = Utils.removeDeadObjects(rockets, allGameObjects, width,height);
     }
 
-    void update(char key){
-        alienRocketCountdown.countDown();
-        move(key);
+    public void update(char key){
         removeDeadObjects();
-        aliensDirection = Utils.computeNextAlienDirection(aliens, aliensDirection, width);
-        rockets.addAll(Utils.getNewRockets(key, aliens, rockets, player, alienRocketCountdown.finished()));
+        move(key);
+        rockets.addAll(Utils.getNewRockets(rockets, alienSwarm.getShootingAlien(), player, key));
     }
 
 

@@ -17,6 +17,7 @@ public record BasicGameObject(V2 pos, String displayString) implements IBasicGam
         return acc;
     }
 
+    @Override
     public  List<V2> hitBox() {
         var acc = new ArrayList<V2>();
         for (var stringWithLocation : show()) {
@@ -34,9 +35,8 @@ public record BasicGameObject(V2 pos, String displayString) implements IBasicGam
         return Utils.intersect(hitBox(),other.hitBox());
     }
 
-    // returns true if there is more than one collision,
-    // the gameObject itself is not counted as a collision
-    // it is always passed in the list of all gameObjects
+    // returns true if the object collides with another object in the list.
+    // We expect "all" to contain this object itself, so we check "collisionCount > 1".
     boolean checkCollision(List<IBasicGameObject>  all){
         var collisionCount = 0;
         for (var other : all) {

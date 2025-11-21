@@ -1,21 +1,19 @@
 package org.example;
 
-public class CountDown {
-    final int start;
-    int current;
+public record CountDown(int start,
+    int current){
 
     public CountDown(int start) {
-        this.start = start;
-        this.current = start;
+        this(start, start);
     }
 
 
-    public void countDown(){
+    public CountDown countDown(){
         if (current > 0) {
-            this.current -= 1;
+            return new CountDown(start, current -1);
         }
         else {
-            this.current = start;
+            return new CountDown(start);
         }
 
     }

@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.List;
 
-public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject, Rocket {
+public record SuperRocket(Rocket playerRocket) implements IBasicGameObject, Rocket {
 
 
     SuperRocket(V2 pos){
@@ -49,7 +49,7 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
 
     @Override
     public Rocket move() {
-        return new SuperRocket((PlayerRocket) playerRocket.move());
+        return new SuperRocket((playerRocket.move()));
     }
 
     @Override
@@ -73,6 +73,6 @@ public record SuperRocket(PlayerRocket playerRocket) implements IBasicGameObject
     // the super rocket is always alive. it flyes to the edge of the board.
     @Override
     public boolean isAlive(List<IBasicGameObject> gameObjects, int width, int height) {
-        return Utils.isOnBoard(playerRocket.pos(), width, height);
+        return Utils.isOnBoard(hitBox(), width, height);
     }
 }

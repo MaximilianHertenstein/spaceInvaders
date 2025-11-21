@@ -40,7 +40,7 @@ public class TUI {
         }
 
         screen.refresh();
-        sleep(20);
+        sleep(10);
     }
 
     public void close() throws IOException {
@@ -52,7 +52,6 @@ public class TUI {
         textGraphics.putString(cols / 2, rows / 2, s);
         screen.refresh();
         sleep(10000);
-
     }
 
     public char getPressedKey() throws IOException {

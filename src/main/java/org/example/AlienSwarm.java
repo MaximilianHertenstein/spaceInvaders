@@ -3,50 +3,102 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record AlienManager(
+public record AlienSwarm(
         V2 aliensDirection,
         List<Alien> aliens,
         CountDown alienRocketCountdown
 ) {
-    AlienManager(){
-        this(new V2(1, 0), Alien.createAliens(), new CountDown(25));
+    AlienSwarm() {
+        this(new V2(1, 0), Alien.createAliens(), new CountDown(100));
     }
 
     public boolean noAliensLeft() {
         return aliens.isEmpty();
     }
 
-    AlienManager move(int width) {
-        alienRocketCountdown.countDown();
-        V2 nextAlienDirection = computeNextAlienDirection(aliens, aliensDirection, width);
-        return new AlienManager(nextAlienDirection,move(nextAlienDirection),this.alienRocketCountdown);
+
+    public boolean aliensAreInLastLine(int height) {
+        for (var alien : aliens) {
+            if (alien.isInLastLine(height)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public AlienSwarm move(){
+        var res = new ArrayList<Alien>();
+        for (var mgo : aliens) {
+            res.add(mgo.move(aliensDirection));
+        }
+        return new AlienSwarm(aliensDirection, res, alienRocketCountdown.countDown());
+    }
+
+    private boolean touchesLeftBorder() {
+        for (var alien : aliens) {
+            if (alien.touchesLeftBorder()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean touchesRightBorder(int width) {
+        for (var alien : aliens) {
+            if (alien.touchesRightBorder(width)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+        private V2 computeNextAlienDirection(int width) {
+            boolean movingRight = aliensDirection.equals(new V2(1, 0));
+            boolean movingLeft  = aliensDirection.equals(new V2(-1, 0));
+            boolean movingDown  = aliensDirection.equals(new V2(0, 1));
+
+            boolean atRightBorder = touchesRightBorder(width);
+            boolean atLeftBorder  = touchesLeftBorder();
+
+            // When moving horizontally and touching a side, start moving down
+            if ((movingRight && atRightBorder) || (movingLeft && atLeftBorder)) {
+                return new V2(0, 1);
+            }
+
+            // When moving down on the right side, start moving left
+            if (movingDown && atRightBorder) {
+                return new V2(-1, 0);
+            }
+
+            // When moving down on the left side, start moving right
+            if (movingDown && atLeftBorder) {
+                return new V2(1, 0);
+            }
+
+            return aliensDirection;
+        }
+
+    private AlienSwarm reactToBorder(int width){
+        return new AlienSwarm(computeNextAlienDirection(width), aliens,alienRocketCountdown);
+    }
+
+    public AlienSwarm moveBounded(int width) {
+        return move().reactToBorder(width);
     }
 
     public boolean countDownFinished() {
         return alienRocketCountdown.finished();
     }
 
-    public List<Alien> move(V2 dir) {
-        var res = new ArrayList<Alien>();
-        for (var mgo : aliens){
-            res.add( mgo.move(dir));
-        }
-        return res;
-    }
-
-     boolean aliensAreInLastLine(int height){
-        return getYCoordinates().contains(height -2);
-    }
-
-    public List<Integer> getXCoordinates(){
-        var acc = new ArrayList<Integer>();
-        for (var alien : aliens){
-            acc.add(alien.pos().x());
-        }
-        return acc;
-    }
-
-     List<Alien> getLowestAliens() {
+    /**
+     * Returns all aliens in the lowest row.
+     * <p>
+     * Invariant: aliens are ordered so that all aliens in the lowest row
+     * come first in the list. Therefore, we can look only at the first element's y.
+     */
+    List<Alien> getLowestAliens() {
         if (aliens.isEmpty()) return List.of();
         int lowestLine = aliens.getFirst().pos().y();
         var acc = new ArrayList<Alien>();
@@ -58,37 +110,14 @@ public record AlienManager(
         return acc;
     }
 
-
-    public List<Integer> getYCoordinates(){
-        var acc = new ArrayList<Integer>();
-        for (var alien : aliens){
-            acc.add(alien.pos().y());
-        }
-        return acc;
+    public Alien getShootingAlien() {
+        if (countDownFinished()){
+            return Utils.random(getLowestAliens());}
+        return null;
     }
 
-
-    public V2 computeNextAlienDirection(List<Alien> aliens, V2 currentDirection, int width){
-        if (currentDirection.equals(new V2(1,0) )&& getXCoordinates().contains(width-4) || currentDirection.equals(new V2(-1,0) )&& getXCoordinates().contains(0)){
-            return new V2(0,1);
-        }
-        if (currentDirection.equals(new V2(0,1) )&& getXCoordinates().contains(width-4) ){
-            return new V2(-1,0);
-
-        }
-        if(currentDirection.equals(new V2(0,1) )&& getXCoordinates().contains(0)){
-            return new V2(1,0);}
-
-        return currentDirection;
-    }
-
-     Alien getRandomAlienInLowestLine() {
-        var aliensInLowestLine = getLowestAliens();
-        return Utils.random(aliensInLowestLine);
-    }
-
-    public AlienManager removeDeadAliens(List<IBasicGameObject> allGameObjects, int width, int heigth) {
-        var newAliens = Utils.removeDeadObjects(aliens, allGameObjects, width, heigth);
-        return new AlienManager(aliensDirection, newAliens, alienRocketCountdown);
+    public AlienSwarm removeDeadAliens(List<IBasicGameObject> allGameObjects, int width, int height) {
+        var newAliens = Utils.removeDeadObjects(aliens, allGameObjects, width, height);
+        return new AlienSwarm(aliensDirection, newAliens, alienRocketCountdown);
     }
 }

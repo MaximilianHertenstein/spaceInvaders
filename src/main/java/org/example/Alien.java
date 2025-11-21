@@ -3,15 +3,15 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Alien(MovableGameObject mgo, int score) implements IBasicGameObject, Shooting {
+public record Alien(MovableGameObject mgo) implements IBasicGameObject, Shooting {
 
 
-    Alien(V2 pos, String displayString, int  score){
-        this(new MovableGameObject(pos, displayString), score);
+    Alien(V2 pos, String displayString){
+        this(new MovableGameObject(pos, displayString));
     }
 
     public Alien move(V2 dir) {
-        return new Alien(mgo.move(dir), score);
+        return new Alien(mgo.move(dir));
     }
 
 
@@ -53,11 +53,10 @@ public record Alien(MovableGameObject mgo, int score) implements IBasicGameObjec
                 var x = 36 - col* 4;
                 var y = 8 - row * 4;
                 var pos = new V2(x, y);
-                res.add(new Alien(pos, rowToAlienStrings(row), 10 * (row + 1))  );
+                res.add(new Alien(pos, rowToAlienStrings(row)));
 
             }
         }return res;
-
     }
 
     @Override
@@ -66,12 +65,24 @@ public record Alien(MovableGameObject mgo, int score) implements IBasicGameObjec
     }
 
 
+    boolean touchesLeftBorder() {
+        return mgo.touchesLeftBorder();
+    }
 
+    boolean touchesRightBorder(int width) {
+        return mgo.touchesRightBorder(width);
+    }
 
+    /**
+     * Returns true if any part of this alien's hitbox reaches the last playable line.
+     *
+     * We define the last playable line as y == height - vertical sie of the alien.
+     */
 
-
-
-
+    boolean isInLastLine(int height) {
+        int lastPossibleLine = height - show().size();
+        return Utils.getYCoordinates(hitBox()).contains(lastPossibleLine);
+    }
 
 
 }
