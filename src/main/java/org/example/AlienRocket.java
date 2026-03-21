@@ -31,7 +31,7 @@ public record AlienRocket(MovableGameObject mgo) implements IBasicGameObject, Ro
     }
 
     @Override
-    public Rocket move() {
+    public AlienRocket move() {
         return new AlienRocket(mgo.move(new V2(0,1)));
     }
 

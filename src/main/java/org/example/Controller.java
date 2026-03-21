@@ -4,10 +4,12 @@ import java.io.IOException;
 
 public class Controller {
     TUI tui;// = new TUI(100,60);
+    //TambuiGUI tui;// = new TUI(100,60);
     Model model;// = new Model(100, 60);
 
     public Controller(int cols, int rows) throws IOException {
         tui = new TUI(cols,rows);
+        //tui = new TambuiGUI(cols,rows);
         model = new Model(cols, rows);
     }
 

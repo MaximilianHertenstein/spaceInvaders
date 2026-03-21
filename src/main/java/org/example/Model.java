@@ -17,7 +17,7 @@ public class Model {
         this.height = height;
         this.player = new Player(new V2(width/2,height -2));
         this.alienSwarm = new AlienSwarm();
-        this.blocks = Utils.generateBlocks(new V2(1, 3 * height/4),4,3, width/8);
+        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height/4),4,3, width/6 );
         this.rockets = new ArrayList<>();
 
     }

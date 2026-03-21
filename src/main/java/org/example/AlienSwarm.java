@@ -8,8 +8,33 @@ public record AlienSwarm(
         List<Alien> aliens,
         CountDown alienRocketCountdown
 ) {
+
+
+    static String rowToAlienStrings(int i){
+        return switch (i){
+            case 2 -> "{@@}\n/\"\"\\" ;
+            case 1 -> "/MM\\\n\\~~/";
+            case 0 -> "{OO}\n/VV\\";
+            default -> throw new IllegalStateException("Unexpected value: " + i);
+        };
+
+    }
+
+    public static  List<Alien>createAliens (){
+        var res = new ArrayList<Alien>();
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 10; col++) {
+                var x = 36 - col* 4;
+                var y = 8 - row * 4;
+                var pos = new V2(x, y);
+                res.add(new Alien(pos, rowToAlienStrings(row)));
+
+            }
+        }return res;
+    }
+
     AlienSwarm() {
-        this(new V2(1, 0), Alien.createAliens(), new CountDown(100));
+        this(new V2(1, 0), createAliens(), new CountDown(5));
     }
 
     public boolean noAliensLeft() {
