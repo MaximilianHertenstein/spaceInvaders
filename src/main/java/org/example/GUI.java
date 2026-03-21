@@ -1,4 +1,4 @@
-package  org.example;
+package org.example;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -12,15 +12,15 @@ public class GUI extends GameApplication {
 
     private static int COLS;
     private static int ROWS;
-    private static final int CHAR_SIZE = 15;
+    private static final int CHAR_SIZE = 32;
 
     private Model model;
     private char currentKey = ' ';
 
-    public static void start(int cols, int rows, String[] args) {
+    public static void start(int cols, int rows) {
         COLS = cols;
         ROWS = rows;
-        GameApplication.launch(GUI.class, args);
+        GameApplication.launch(GUI.class, new String[] {});
     }
 
     @Override
@@ -33,14 +33,16 @@ public class GUI extends GameApplication {
     @Override
     protected void initGame() {
         model = new Model(COLS, ROWS);
+        FXGL.getGameScene().setBackgroundColor(Color.BLACK);
     }
 
     @Override
     protected void initInput() {
-        FXGL.onKey(KeyCode.LEFT,  () -> currentKey = 'l');
-        FXGL.onKey(KeyCode.RIGHT, () -> currentKey = 'r');
-        FXGL.onKey(KeyCode.SPACE, () -> currentKey = ' ');
-        FXGL.onKeyDown(KeyCode.R, () -> model = new Model(COLS, ROWS));
+        FXGL.onKey(KeyCode.A,  () -> currentKey = 'a');
+        FXGL.onKey(KeyCode.D,  () -> currentKey = 'd');
+        FXGL.onKey(KeyCode.L,  () -> currentKey = 'l');
+        FXGL.onKey(KeyCode.K,  () -> currentKey = 'k');
+        FXGL.onKeyDown(KeyCode.SPACE, () -> model = new Model(COLS, ROWS));
         FXGL.onKeyDown(KeyCode.Q, () -> FXGL.getGameController().exit());
     }
 
@@ -54,27 +56,33 @@ public class GUI extends GameApplication {
     }
 
     private void render() {
-        FXGL.getGameScene().clearGameViews();
+        var scene = FXGL.getGameScene();
+        scene.clearGameViews();
+        scene.clearUINodes();
 
         if (!model.gameOngoing()) {
-            drawText(model.getEndMessage() + "  —  R: Neustart  Q: Beenden",
-                    Color.YELLOW, CHAR_SIZE * 2, 50, ROWS * CHAR_SIZE / 2);
+            String msg = model.getEndMessage() + "\nLeertaste: Neustart\nQ: Beenden";
+            drawText(msg, 0, ROWS * CHAR_SIZE / 2.0, CHAR_SIZE * 4);
             return;
         }
 
         for (var item : model.getUIState()) {
-            drawText(item.string(), Color.WHITE, CHAR_SIZE,
-                    item.location().x() * CHAR_SIZE,
-                    item.location().y() * CHAR_SIZE);
+            drawText(item.string(), item.location().x() * CHAR_SIZE, item.location().y() * CHAR_SIZE, CHAR_SIZE);
         }
     }
 
-    private void drawText(String s, Color color, int size, double x, double y) {
+
+    private void drawText(String s, double x, double y, int charSize) {
+        var t = makeText(s, x, y, charSize);
+        FXGL.getGameScene().addUINode(t);
+    }
+
+    private static Text makeText(String s, double x, double y, int charSize) {
         var t = new Text(s);
-        t.setFill(color);
-        t.setFont(Font.font("Monospaced", size));
+        t.setFill(Color.WHITE);
+        t.setFont(Font.font(charSize));
         t.setX(x);
         t.setY(y);
-        FXGL.getGameScene().addUINode(t);
+        return t;
     }
 }
