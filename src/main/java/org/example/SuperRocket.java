@@ -2,24 +2,17 @@ package org.example;
 
 import java.util.List;
 
-public record SuperRocket(Rocket playerRocket) implements IBasicGameObject, Rocket {
+public record SuperRocket(MovableGameObject mgo) implements IBasicGameObject, Rocket {
 
 
     SuperRocket(V2 pos){
 
-        String rocket = """
-        ╔╦╦═╦╬╦═╦╦╗
-        ╠╬╔╗╬█╬╔╗╬╣
-        ╠╬║░╬█╬░║╬╣
-        ╠╬╚╗╬▓╬╔╝╬╣
-        ╠╬══╚╬╝══╬╣
-        ╠╬╔╗╬▓╬╔╗╬╣
-        ╠╬║░╬█╬░║╬╣
-        ╠╬╚╦╬╬╬╦╝╬╣
-        ╚╬╬╩╬╩╬╩╬╬╝
-        ▓▓╚╩═╩═╩╝▓▓""";
 
 
+        String rocket = "";
+        for (int i = 0; i <50; i++) {
+            rocket += "(((||||||||||)))\n";
+        }
 
 //        var s =
 //                     """
@@ -52,17 +45,17 @@ public record SuperRocket(Rocket playerRocket) implements IBasicGameObject, Rock
 //         """;
 
 
-        var playerRocket = new PlayerRocket(new MovableGameObject(pos,rocket)); // "/|\\\n|||\n|||\n|||\n|||"));
+        var playerRocket = new MovableGameObject(pos,rocket); // "/|\\\n|||\n|||\n|||\n|||"));
         this(playerRocket);
     }
     @Override
     public V2 pos() {
-        return playerRocket.pos();
+        return mgo.pos();
     }
 
     @Override
     public Rocket move() {
-        return new SuperRocket((playerRocket.move()));
+        return new SuperRocket((mgo.move(new V2(0,-3))));
     }
 
     @Override
@@ -74,12 +67,12 @@ public record SuperRocket(Rocket playerRocket) implements IBasicGameObject, Rock
 
     @Override
     public List<StringWithLocation> show() {
-        return playerRocket.show();
+        return mgo.show();
     }
 
     @Override
     public List<V2> hitBox() {
-        return playerRocket.hitBox();
+        return mgo.hitBox();
     }
 
 

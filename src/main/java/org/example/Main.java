@@ -1,9 +1,12 @@
 package org.example;
 
+import com.almasb.fxgl.app.GameApplication;
+
 public class Main {
     // Korrekte main-Methode für das Jar-Manifest und lokale Ausführung
     public static void main() {
-        GUI.start(100, 60);
+//        SpaceInvadersApp.start(100, 60);
+        GameApplication.launch(SpaceInvadersApp.class, new String[]{});
 //   var controller = new Controller(100, 60);
 //   controller.runGame();
 //

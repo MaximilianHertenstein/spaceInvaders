@@ -15,11 +15,18 @@ public class Model {
     public Model(int width, int height) {
         this.width = width;
         this.height = height;
-        this.player = new Player(new V2(width/2,height -2));
+        this.player = new Player(new V2(width /2, height -2));
         this.alienSwarm = new AlienSwarm();
-        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height/4),4,3, width/6 );
+        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height /4),4,3, width /6 );
         this.rockets = new ArrayList<>();
 
+    }
+
+    void restart() {
+        this.player = new Player(new V2(width /2, height -2));
+        this.alienSwarm = new AlienSwarm();
+        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height /4),4,3, width /6 );
+        this.rockets = new ArrayList<>();
     }
 
     boolean gameWon(){
