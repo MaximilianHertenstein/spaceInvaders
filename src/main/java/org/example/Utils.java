@@ -64,6 +64,15 @@ public class Utils {
     }
 
 
+    public static String repeat(String s, int count){
+        var acc = "";
+        for (int i =0; i < count; i++){
+            acc += s;
+        }
+        return acc;
+    }
+
+
 
 
 
@@ -116,7 +125,7 @@ public class Utils {
             shootingObjects.add(player);
         }
         if (pressedKey == 'l' && playerCanShoot) {
-            shootingObjects.add(new InvisibleRocketLauncher(player.pos()));
+            shootingObjects.add(new InvisiblePlasmaCannon(player.pos()));
         }
         return shootingObjects;
     }

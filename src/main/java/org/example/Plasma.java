@@ -2,17 +2,15 @@ package org.example;
 
 import java.util.List;
 
-public record SuperRocket(MovableGameObject mgo) implements IBasicGameObject, Rocket {
+
+public record Plasma(MovableGameObject mgo) implements IBasicGameObject, Rocket {
 
 
-    SuperRocket(V2 pos){
+    Plasma(V2 pos, int height){
 
 
+        String rocket =  Utils.repeat("(((||||||||||)))\n", height);
 
-        String rocket = "";
-        for (int i = 0; i <50; i++) {
-            rocket += "(((||||||||||)))\n";
-        }
 
 //        var s =
 //                     """
@@ -45,8 +43,8 @@ public record SuperRocket(MovableGameObject mgo) implements IBasicGameObject, Ro
 //         """;
 
 
-        var playerRocket = new MovableGameObject(pos,rocket); // "/|\\\n|||\n|||\n|||\n|||"));
-        this(playerRocket);
+        var mgo = new MovableGameObject(pos,rocket); // "/|\\\n|||\n|||\n|||\n|||"));
+        this(mgo);
     }
     @Override
     public V2 pos() {
@@ -54,8 +52,8 @@ public record SuperRocket(MovableGameObject mgo) implements IBasicGameObject, Ro
     }
 
     @Override
-    public Rocket move() {
-        return new SuperRocket((mgo.move(new V2(0,-3))));
+    public Plasma move() {
+        return new Plasma((mgo.move(new V2(0,-3))));
     }
 
     @Override

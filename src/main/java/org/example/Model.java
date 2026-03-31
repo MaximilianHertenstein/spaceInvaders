@@ -11,38 +11,21 @@ public class Model {
     private List<BasicGameObject> blocks;
     private List<Rocket> rockets;
 
+    void restart() {
+        this.player = new Player(new V2(width /2, height -2));
+        this.alienSwarm = new AlienSwarm();
+        this.blocks = LevelFactory.generateBlocks(width, height );
+        this.rockets = new ArrayList<>();
+    }
 
     public Model(int width, int height) {
         this.width = width;
         this.height = height;
-        this.player = new Player(new V2(width /2, height -2));
-        this.alienSwarm = new AlienSwarm();
-        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height /4),4,3, width /6 );
-        this.rockets = new ArrayList<>();
-
-    }
-
-    void restart() {
-        this.player = new Player(new V2(width /2, height -2));
-        this.alienSwarm = new AlienSwarm();
-        this.blocks = LevelFactory.generateBlocks(new V2(1, 3 * height /4),4,3, width /6 );
-        this.rockets = new ArrayList<>();
+        restart();
     }
 
     boolean gameWon(){
         return alienSwarm.noAliensLeft();
-    }
-
-    boolean gameLost(){
-        return  alienSwarm.aliensAreInLastLine(height) || !playerIsAlive();
-    }
-
-    private boolean playerIsAlive() {
-        return player.isAlive(gameObjects(),width,height);
-    }
-
-    public boolean gameOngoing() {
-        return !gameWon() && !gameLost();
     }
 
     public String getEndMessage(){
@@ -50,6 +33,13 @@ public class Model {
             return "You won!";
         }
         return "You lost!";
+    }
+
+    private void move(char dir){
+
+        alienSwarm = alienSwarm.moveBounded(width);
+        player = player.moveBounded(Utils.charToV2(dir),width);
+        rockets = Utils.move(rockets);
     }
 
 
@@ -63,15 +53,32 @@ public class Model {
     }
 
 
-    private void move(char dir){
-        rockets = Utils.move(rockets);
-        alienSwarm = alienSwarm.moveBounded(width);
-        player = player.moveBounded(Utils.charToV2(dir),width);
+    private boolean playerIsAlive() {
+        return player.isAlive(gameObjects(),width,height);
     }
+
+    boolean gameLost(){
+        return  alienSwarm.aliensAreInLastLine(height) || !playerIsAlive();
+    }
+
+
+    public boolean gameOngoing() {
+        return !gameWon() && !gameLost();
+    }
+
+
+
+
+
+
+
+
 
     public List<StringWithLocation>  getUIState(){
         return Utils.getStringsWithLocation(gameObjects());
     }
+
+
 
 
     private void removeDeadObjects(){

@@ -24,4 +24,15 @@ public class LevelFactory {
         }
         return acc;
     }
+
+
+    public static List<BasicGameObject> generateBlocks(int width, int height) {
+        int blockCols = 4;
+        int blockGap = 2;
+        int blockRows = 3;
+        int blockCount = width / (blockCols + blockGap);
+        return generateBlocks(new V2(1, 3 * height / 4), blockCols, blockRows, blockCount);
+    }
+
+
 }
