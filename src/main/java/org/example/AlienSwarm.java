@@ -79,7 +79,7 @@ public record AlienSwarm(
     }
 
 
-        private V2 computeNextAlienDirection(int width) {
+        V2 computeNextAlienDirection(int width) {
             boolean movingRight = aliensDirection.equals(new V2(1, 0));
             boolean movingLeft  = aliensDirection.equals(new V2(-1, 0));
             boolean movingDown  = aliensDirection.equals(new V2(0, 1));

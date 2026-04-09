@@ -11,7 +11,7 @@ public class Main {
 //        SpaceInvadersApp.start(100, 60);
         //var tui = new TUI(20, 7);
         //tui.print(List.of(new StringWithLocation("Hello", new V2(5, 3)),new StringWithLocation("World", new V2(9, 5))));
-        //GameApplication.launch(SpaceInvadersApp.class, new String[]{});
+        GameApplication.launch(SpaceInvadersApp.class, new String[]{});
 //   var controller = new Controller(100, 60);
 //   controller.runGame();
 //

@@ -6,9 +6,9 @@ import java.util.List;
 public class Model {
     private final int width;
     private final int height;
-    private Player player;
-    private AlienSwarm alienSwarm;
-    private List<BasicGameObject> blocks;
+    Player player;
+    AlienSwarm alienSwarm;
+    List<BasicGameObject> blocks;
     private List<Rocket> rockets;
 
     void restart() {
@@ -35,7 +35,7 @@ public class Model {
         return "You lost!";
     }
 
-    private void move(char dir){
+    void move(char dir){
 
         alienSwarm = alienSwarm.moveBounded(width);
         player = player.moveBounded(Utils.charToV2(dir),width);

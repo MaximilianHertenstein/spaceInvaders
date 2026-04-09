@@ -28,7 +28,7 @@ public record Player(MovableGameObject mgo) implements IBasicGameObject, Shootin
         return new Player(mgo().move(dir));
     }
 
-    private Player reactToBorder(int width) {
+    Player reactToBorder(int width) {
        if (mgo.touchesRightBorder(width))
            return  move(new V2(-1, 0));
        else if (mgo.touchesLeftBorder())

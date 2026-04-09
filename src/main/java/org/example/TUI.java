@@ -30,7 +30,7 @@ public class TUI {
         screen.setCursorPosition(null);
         textGraphics = screen.newTextGraphics();
     }
-    // private val screen = DefaultTerminalFactory().setInitialTerminalSize(TerminalSize(columns + 2, rows + 2)).createScreen()
+
 
 
     public void print(List<StringWithLocation> uiState) throws IOException, InterruptedException {
