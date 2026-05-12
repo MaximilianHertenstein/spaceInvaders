@@ -24,6 +24,26 @@ public class Model {
         restart();
     }
 
+    public Model(int width, int height, V2 playerPos, List<Alien> alienSwarm, List<BasicGameObject> blocks) {
+        this.width = width;
+        this.height = height;
+        this.player =new Player(playerPos);
+        this.alienSwarm = new AlienSwarm(new V2(1,0), alienSwarm, new CountDown(5));
+        this.blocks = blocks;
+        this.rockets = List.of();
+    }
+
+
+    public Model(int width, int height, V2 playerPos, List<Alien> alienSwarm, List<BasicGameObject> blocks, List<Rocket> rockets) {
+        this.width = width;
+        this.height = height;
+        this.player =new Player(playerPos);
+        this.alienSwarm = new AlienSwarm(new V2(1,0), alienSwarm, new CountDown(5));
+        this.blocks = blocks;
+        this.rockets =(rockets);
+    }
+
+
     boolean gameWon(){
         return alienSwarm.noAliensLeft();
     }
@@ -39,7 +59,7 @@ public class Model {
 
         alienSwarm = alienSwarm.moveBounded(width);
         player = player.moveBounded(Utils.charToV2(dir),width);
-        rockets = Utils.move(rockets);
+        rockets = (Utils.move(rockets));
     }
 
 
@@ -53,7 +73,7 @@ public class Model {
     }
 
 
-    private boolean playerIsAlive() {
+    boolean playerIsAlive() {
         return player.isAlive(gameObjects(),width,height);
     }
 
@@ -85,13 +105,13 @@ public class Model {
         List<IBasicGameObject> allGameObjects = gameObjects();
         blocks = Utils.removeDeadObjects(blocks, allGameObjects, width,height);
         alienSwarm = alienSwarm.removeDeadAliens(allGameObjects,width, height);
-        rockets = Utils.removeDeadObjects(rockets, allGameObjects, width,height);
+        rockets = (Utils.removeDeadObjects(rockets, allGameObjects, width,height));
     }
 
     public void update(char key){
         removeDeadObjects();
         move(key);
-        rockets.addAll(Utils.getNewRockets(rockets, alienSwarm.getShootingAlien(), player, key));
+        rockets = RocketFactory.addNewRockets(rockets, alienSwarm.getShootingAlien(), player, key);
     }
 
 

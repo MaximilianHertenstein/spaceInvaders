@@ -24,7 +24,7 @@ public record PlayerRocket(MovableGameObject mgo) implements IBasicGameObject, R
     }
 
     @Override
-    public Rocket move() {
+    public PlayerRocket move() {
         return new PlayerRocket(mgo.move(new V2(0,-1)));
     }
 

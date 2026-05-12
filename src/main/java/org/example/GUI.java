@@ -2,24 +2,18 @@ package org.example;
 
 import com.almasb.fxgl.app.scene.GameScene;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.Effect;
 import javafx.geometry.VPos;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GUI {
 
     public static final Color NEON_GREEN = Color.web("#39FF14");
-
     private final GameScene scene;
     private final Font smallFont;
     private final DropShadow neonEffect;
@@ -28,14 +22,17 @@ public class GUI {
         var fontPath = GUI.class.getResourceAsStream("/DepartureMono-Regular.otf");
         smallFont = Font.loadFont(fontPath, size);
         scene = FXGL.getGameScene();
+        neonEffect = createShadow();
+    }
 
+    private static DropShadow createShadow() {
         var glow = new Glow(0.8);
         var shadow = new DropShadow();
         shadow.setColor(NEON_GREEN);
         shadow.setRadius(14);
         shadow.setSpread(0.35);
         shadow.setInput(glow);
-        neonEffect = shadow;
+        return shadow;
     }
 
     public void clearScreen() {
@@ -54,15 +51,18 @@ public class GUI {
     }
 
     private void drawText(String s, double x, double y) {
-        double charSize = smallFont.getSize();
+        var text = createText(s, x, y);
+        scene.addUINode(text);
+    }
 
+    private Text createText(String s, double x, double y) {
+        double charSize = smallFont.getSize();
         var text = new Text(x * charSize, y * charSize, s);
         text.setFill(NEON_GREEN);
         text.setFont(smallFont);
         text.setTextOrigin(VPos.TOP);
         text.setBoundsType(TextBoundsType.VISUAL);
         text.setEffect(neonEffect);
-
-        scene.addUINode(text);
+        return text;
     }
 }

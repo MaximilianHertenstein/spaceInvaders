@@ -22,11 +22,10 @@ public class SpaceInvadersApp extends GameApplication {
 
 
     @Override
-    protected void initSettings(GameSettings settings) {
+    public void initSettings(GameSettings settings) {
         settings.setWidth(COLS * CHAR_SIZE);
         settings.setHeight(ROWS * CHAR_SIZE);
         settings.setTitle("Space Invaders");
-
     }
 
     @Override
